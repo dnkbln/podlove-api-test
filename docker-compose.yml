@@ -1,0 +1,31 @@
+version: '3.3'
+services:
+
+  wordpress:
+    image: podlove-api:latest
+    container_name: podlove-api-test-wordpress
+    volumes:
+      - ./plugin/podlove-podcasting-plugin-for-wordpress:/var/www/html/wp-content/plugins/podlove-publisher
+      - ./config/php.conf.ini:/usr/local/etc/php/conf.d/php.ini
+    environment:
+      - WORDPRESS_DB_NAME=podlove-api-test-wordpress
+      - WORDPRESS_TABLE_PREFIX=wp_
+      - WORDPRESS_DB_HOST=mysql
+      - WORDPRESS_DB_USER=wp
+      - WORDPRESS_DB_PASSWORD=password
+    depends_on:
+      - mysql
+    restart: always
+    ports:
+      - 3001:80
+
+  mysql:
+    image: mariadb:latest
+    container_name: podlove-api-test-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=wp
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=podlove-api-test-wordpress
+    restart: always
+
