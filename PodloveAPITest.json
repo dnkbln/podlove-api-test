@@ -1,0 +1,1586 @@
+{
+	"info": {
+		"_postman_id": "aa6f1f29-425e-4935-b5af-fa19c5a0c8be",
+		"name": "API Podlove Publisher Test",
+		"description": "Beispiel Test\n",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST JWT Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"    pm.environment.set(\"token\", jsonResponse.data.token);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "dirk",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "dirk",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/wp-json/jwt-auth/v1/token",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"jwt-auth",
+						"v1",
+						"token"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "dirk",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "dirk",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Podcast",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {",
+							"    \"properties\": {",
+							"        \"_version\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"title\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"subtitle\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"summary\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"mnemonic\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"itunes_type\": {",
+							"            \"type\": \"string\"",
+							"        }",
+							"    },",
+							"    \"required\": [",
+							"        \"_version\",",
+							"        \"title\",",
+							"        \"subtitle\",",
+							"        \"summary\",",
+							"        \"mnemonic\",",
+							"        \"itunes_type\"",
+							"    ]",
+							"};",
+							"",
+							"var jsonResponse = pm.response.json();",
+							"pm.test('Get podcast data', function() {",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(jsonResponse._version).to.eql(\"v2\");",
+							"    pm.response.to.have.jsonSchema(schema);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/podcast",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"podcast"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Draft episodes with wrong password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get draft episodes should fail', function() {",
+							"    pm.response.to.have.status(401);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/episodes?filter=draft",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"episodes"
+					],
+					"query": [
+						{
+							"key": "filter",
+							"value": "draft"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Draft episodes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get draft episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/episodes?filter=draft",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"episodes"
+					],
+					"query": [
+						{
+							"key": "filter",
+							"value": "draft"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Draft episodes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(201);",
+							"    pm.environment.set(\"id\", jsonResponse.id);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/episodes/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"episodes",
+						""
+					],
+					"query": [
+						{
+							"key": null,
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH created episodes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\") + '?title=TestPostman&number=' + pm.environment.get(\"id\")",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/episodes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"episodes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET created episodes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(jsonResponse.title).to.eql(\"TestPostman\");",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/episodes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"episodes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET created episodes without authorization should failed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(401);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/episodes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"episodes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET contributors to created episode",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(jsonResponse.contributors).to.length(0);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\") + '/contributions'",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/episodes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"episodes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH  contributors to created episode",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\") + '/contributions'",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"contributors\":[{\"contributor_id\":\"5\", \"comment\":\"Helfer\"}]}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/episodes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"episodes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET contributors to created episode Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(jsonResponse.contributors).to.length(1);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\") + '/contributions'",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/episodes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"episodes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST chapters to created episode",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(401);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/chapters",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"chapters"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET chapters from created episode before add",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(jsonResponse.chapters).to.length(0);",
+							"",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/chapters",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"chapters"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST chapters to created episode Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"chapters\":[{\"start\":\"00:00:01\", \"title\":\"Into\"}, {\"start\":\"00:00:59\", \"title\":\"Abspann\"}] }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/chapters",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"chapters"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET chapters from created episode",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(jsonResponse.chapters).to.length(2);",
+							"",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/chapters",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"chapters"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST add transcript to created episodes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"type\":\"vtt\",\"content\":\"WEBVTT Kind: captions; Language: de\\n\\n00:01.000 --> 00:02.000\\n<v dirk> Gut dann geht es los.\\n\\n00:02.000 --> 00:05.000\\n<v martin> Das ist die nullte Folge meines Podcastes. \\n\\n00:06.000 --> 00:11.000\\n<v dirk> Ich werde sie wahrscheinlich nie veröffentlichen.\\n\"}"
+				},
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/transcripts",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"transcripts"
+					],
+					"query": [
+						{
+							"key": "content",
+							"value": "WEBVTT Kind: captions; Language: de\n\n00:01.000 --> 00:02.000\n<v dirk> Gut dann geht es los.\n\n00:02.000 --> 00:05.000\n<v martin> Das ist die nullte Folge meines Podcastes. \n\n00:06.000 --> 00:11.000\n<v dirk> Ich werde sie wahrscheinlich nie veröffentlichen.",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET added transcript to created episodes (complete)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {",
+							"    \"properties\": {",
+							"        \"_version\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"next\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"transcript\": {",
+							"            \"properties\": {",
+							"                \"id\": {",
+							"                    \"type\": \"integer\"",
+							"                }",
+							"            }",
+							"        }",
+							"    },",
+							"    \"required\": [",
+							"        \"_version\",",
+							"    ]",
+							"};",
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(jsonResponse._version).to.eql(\"v2\");",
+							"    pm.expect(jsonResponse.transcript).to.length(3);",
+							"    pm.response.to.have.jsonSchema(schema);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/transcripts",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"transcripts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET added transcript to created episodes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {",
+							"    \"properties\": {",
+							"        \"_version\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"next\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"transcript\": {",
+							"            \"properties\": {",
+							"                \"id\": {",
+							"                    \"type\": \"integer\"",
+							"                }",
+							"            }",
+							"        }",
+							"    },",
+							"    \"required\": [",
+							"        \"_version\",",
+							"    ]",
+							"};",
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(jsonResponse._version).to.eql(\"v2\");",
+							"    pm.environment.set(\"transcript_id\", jsonResponse.transcript[0].id);",
+							"    pm.response.to.have.jsonSchema(schema);",
+							"",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\") + '?offset=1&limit=1';",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/transcripts",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"transcripts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET added transcript paragraph",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {",
+							"    \"properties\": {",
+							"        \"_version\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"next\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"transcript\": {",
+							"            \"properties\": {",
+							"                \"id\": {",
+							"                    \"type\": \"integer\"",
+							"                }",
+							"            }",
+							"        }",
+							"    },",
+							"    \"required\": [",
+							"        \"_version\",",
+							"    ]",
+							"};",
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(jsonResponse._version).to.eql(\"v2\");",
+							"    pm.response.to.have.jsonSchema(schema);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"transcript_id\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/transcripts/paragraphs",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"transcripts",
+						"paragraphs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH transcript paragraph change without password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(401);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"transcript_id\") + '?text=changed transcript data';",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/transcripts/paragraphs",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"transcripts",
+						"paragraphs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH transcript paragraph change with password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(jsonResponse.status).to.eql(\"ok\");",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"transcript_id\") + '?text=changed transcript data';",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/transcripts/paragraphs",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"transcripts",
+						"paragraphs"
+					],
+					"query": [
+						{
+							"key": "text",
+							"value": "geaenderter Text",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET voices from transcript Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\") + '?voice=dirk&contributor_id=1'",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/transcripts/voices",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"transcripts",
+						"voices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET voices from transcript",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {",
+							"    \"properties\": {",
+							"        \"_version\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"voices\": {",
+							"            \"properties\": {",
+							"                \"voice\": {",
+							"                    \"type\": \"string\"",
+							"                },",
+							"                \"contributor_id\": {",
+							"                    \"type\": \"integer\"",
+							"                }",
+							"            }",
+							"        }",
+							"    },",
+							"    \"required\": [",
+							"        \"_version\",",
+							"    ]",
+							"};",
+							"",
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(jsonResponse._version).to.eql(\"v2\");",
+							"    pm.expect(jsonResponse.voices[0].voice).to.eql(\"dirk\");",
+							"    pm.expect(jsonResponse.voices[0].contributor_id).to.eql(\"1\");",
+							"    pm.expect(jsonResponse.voices).to.length(2);",
+							"    pm.response.to.have.jsonSchema(schema);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\")",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/transcripts/voices",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"transcripts",
+						"voices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE  delete added transcript to created episodes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"type\":\"vtt\",\"content\":\"WEBVTT Kind: captions; Language: de\\n\\n00:01.000 --> 00:02.000\\n<v dirk> Gut dann geht es los.\\n\\n00:02.000 --> 00:05.000\\n<v martin> Das ist die nullte Folge meines Podcastes. \\n\\n00:06.000 --> 00:11.000\\n<v dirk> Ich werde sie wahrscheinlich nie veröffentlichen.\\n\"}"
+				},
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/transcripts",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"transcripts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE created episodes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"pm.test('create episodes should work', function() {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.url = pm.request.url + '/' + pm.environment.get(\"id\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/wp-json/podlove/v2/episodes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"wp-json",
+						"podlove",
+						"v2",
+						"episodes"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3001"
+		}
+	]
+}
