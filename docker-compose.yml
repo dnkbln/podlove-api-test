@@ -6,7 +6,10 @@ services:
     container_name: podlove-api-test-wordpress
     volumes:
       - ./plugin/podlove-podcasting-plugin-for-wordpress:/var/www/html/wp-content/plugins/podlove-publisher
+      - ./plugin/jwt-auth:/var/www/html/wp-content/plugins/jwt-auth
       - ./config/php.conf.ini:/usr/local/etc/php/conf.d/php.ini
+      - ./config/.htaccess:/var/www/html/.htaccess
+      - ./config/wp-config.php:/var/www/html/wp-config.php
     environment:
       - WORDPRESS_DB_NAME=podlove-api-test-wordpress
       - WORDPRESS_TABLE_PREFIX=wp_
